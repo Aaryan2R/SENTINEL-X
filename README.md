@@ -4,6 +4,20 @@ Passive, read-only network threat detection for one-way (data-diode) monitored n
 
 **Three pillars:** provable passivity · diode-aware visibility · evidence-chained incidents.
 
+> **Detect the attack. Prove the monitor stayed silent. Explain every alert.**
+>
+> SENTINEL-X is a judge-ready, offline demonstration of receive-only network
+> monitoring: it detects scan and flood behavior from flow metadata, reports
+> capture visibility, and lets a reviewer recompute the evidence chain.
+
+## Why this demo stands out
+
+- **Safe by design:** payloads are never inspected, decrypted, or sent back.
+- **Honest passivity:** Linux can show measured interface TX counters; Windows
+  clearly reports software emulation instead of claiming a hardware diode.
+- **Reproducible evidence:** seeded benign, port-scan, and SYN-flood scenarios
+  produce predictable outcomes with measured evaluation and tamper checks.
+
 ## Quickstart — Phase 1 demo
 
 ### Prerequisites
