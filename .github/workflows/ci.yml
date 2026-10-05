@@ -1,0 +1,70 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  engine-checks:
+    name: Engine (lint + type + test)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: engine
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+
+      - name: Set up Python
+        run: uv python install 3.14
+
+      - name: Install dependencies
+        run: uv sync --extra dev --python 3.14
+
+      - name: Ruff lint
+        run: uv run ruff check .
+
+      - name: Ruff format check
+        run: uv run ruff format --check .
+
+      - name: Mypy type check
+        run: uv run mypy sentinel/ tests/
+
+      - name: Pytest
+        run: uv run pytest tests/ -v --tb=short
+
+      # Seeded regression stub (TST-2) — expanded when detectors land
+      - name: Seeded regression (stub)
+        run: echo "Seeded regression stub — expanded in T-019+"
+
+      # TX = 0 assertion stub (TST-5) — needs Linux stack running
+      - name: TX = 0 assertion (stub)
+        run: echo "TX=0 stub — requires full stack on Linux (T-014)"
+
+  frontend-checks:
+    name: Frontend (build)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: TypeScript check + build
+        run: npm run build
