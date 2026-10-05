@@ -40,7 +40,7 @@ Goal: scan, DDoS, SYN flood and DGA detection with explained alerts on a live da
 ### Ingestion and streaming
 - [x] **T-010** Define Pydantic schemas: flow, signal, alert (schema v1.0). FR-40. P0, S. Dep: T-002
 - [x] **T-011** Normaliser: parse Zeek JSON logs (conn, dns, ssl), map to flow schema, add `seq` and event time, publish to src and dst streams. FR-01, FR-03. P0, M. Dep: T-010, T-008
-- [ ] **T-012** Stream layer: bounded streams, consumer groups, shard assignment, dead-letter stream and counters. FR-03. P0, M. Dep: T-011
+- [x] **T-012** Stream layer: bounded streams, consumer groups, shard assignment, dead-letter stream and counters. FR-03. P0, M. Dep: T-011
 - [ ] **T-013** Bus interface abstraction so Redis can be swapped later (ARC-6). P0, S. Dep: T-012
 - [ ] **T-014** No-outbound proof: check TX counters stay 0 during pipeline tests. FR-04. P0, S. Dep: T-006, T-009
 
