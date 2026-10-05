@@ -30,6 +30,7 @@
 | 2026-10-04 | Idea expanded; USP set (provable passivity, diode-aware visibility, evidence-chained incidents); PRD v1.0 and Design Document v1.0 drafted; reference design docs gathered. |
 | 2026-10-05 | Tech Stack Document v1.0 drafted with versions checked against public release pages. Design Document corrected: Redis Stack is not needed (Redis 8 has Count-Min Sketch built in). Context files (`architecture.md`, `rules.md`, `task.md`, `memory.md`) created. |
 | 2026-10-05 | T-001 done: repo layout initialised per architecture.md §14; .gitignore, .env.example, README; docs moved to docs/. |
+| 2026-10-05 | T-002 done: uv project (Python 3.14), ruff+mypy+pytest configured, lockfile committed. All checks pass. |
 
 ## 4. Locked decisions (summary)
 

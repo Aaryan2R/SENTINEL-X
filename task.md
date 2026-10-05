@@ -20,7 +20,7 @@
 Goal: the services start and one replayed flow reaches the dashboard.
 
 - [x] **T-001** Initialise repository layout (see `architecture.md` section 14), `.gitignore`, `.env.example`, `README` quickstart. P0, S
-- [ ] **T-002** Python tooling: `uv` project, `ruff`, `mypy`, `pytest`, pre-commit hooks, committed lockfile. P0, S. Dep: T-001
+- [x] **T-002** Python tooling: `uv` project, `ruff`, `mypy`, `pytest`, pre-commit hooks, committed lockfile. P0, S. Dep: T-001
 - [ ] **T-003** Frontend tooling: React 19 + TypeScript + Vite 8 + Tailwind 4 skeleton, lint, `npm ci` lockfile. P0, S. Dep: T-001
 - [ ] **T-004** Sensor image: Zeek (pinned by digest; 9.0 LTS, 8.0.x fallback), install JA4 package with `zkg` at build time, JSON logs enabled. P0, M. Dep: T-001
 - [ ] **T-005** Compose skeleton with profiles `core` and `demo`; `enclave_net` as `internal: true`; services as stubs. P0, M. Dep: T-001
