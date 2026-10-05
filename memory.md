@@ -17,10 +17,10 @@
 
 ## 2. Current status
 
-- Phase: **0 (setup)**. No application code written yet.
+- Phase: **0 complete**. All 9 tasks done (T-001–T-009). Ready for Phase 1.
 - Documents drafted (v1.0, for team review): PRD, Software Architecture and Design Document (arc42 format), Technology Stack Document.
 - Context files created: `architecture.md`, `rules.md`, `task.md`, `memory.md`.
-- Next: complete Phase 0 tasks (`task.md` T-001 to T-009), then the MVP slice.
+- Next: Phase 1 — core pipeline (T-010 schemas, T-011 normaliser, T-012 streams).
 - Team, owners, dependency-freeze date and demo date: **not set** (fill in).
 
 ## 3. Status log (append only, newest last)
@@ -37,6 +37,7 @@
 | 2026-10-05 | T-007 done: Scapy traffic generator (normal+scan), fully deterministic (hash-verified). Separate uv project. Gotcha: Scapy RandMAC/IP id/TCP seq/pkt.time all need explicit seeding. |
 | 2026-10-05 | T-004 done: sensor Dockerfile (Zeek 9.0 multi-stage, JA4, JSON logs, non-root). Digest pin deferred to Linux build. |
 | 2026-10-05 | T-008 done: hello-flow pipeline — normaliser, FastAPI, dashboard flow table. 6 tests pass, lint/mypy clean. Full stack needs Linux. |
+| 2026-10-05 | T-009 done: GitHub Actions CI — engine (ruff/mypy/pytest) + frontend (tsc+build). Regression and TX=0 stubs. |
 
 ## 4. Locked decisions (summary)
 
