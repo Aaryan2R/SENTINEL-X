@@ -40,6 +40,8 @@
 | 2026-10-05 | T-009 done: GitHub Actions CI — engine (ruff/mypy/pytest) + frontend (tsc+build). Regression and TX=0 stubs. |
 | 2026-10-05 | T-010 done: Pydantic schemas v1.0 — FlowRecord (DNS/TLS), Signal (score bounds, mandatory evidence), Alert (hash chain). 12 tests. |
 | 2026-10-05 | T-011 done: Full normaliser (conn/dns/ssl), RedisStreamPublisher (async dual-shard), StreamPublisher Protocol. 18 tests. CI format fix. |
+| 2026-10-05 | T-012 done: StreamManager (consumer groups, XREADGROUP, ack, dead-letter, lag, trim, shard assignment). 27 tests. |
+| 2026-10-05 | T-013 done: Bus abstraction — BusPublisher/Consumer/Admin Protocols (runtime_checkable). 30 tests. |
 
 ## 4. Locked decisions (summary)
 
