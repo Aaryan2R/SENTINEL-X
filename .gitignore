@@ -1,0 +1,61 @@
+# ── Python ──
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.venv/
+*.egg
+
+# ── uv / pip ──
+# Keep uv.lock committed; ignore virtualenvs
+.python-version
+
+# ── Node / Frontend ──
+node_modules/
+frontend/dist/
+frontend/.vite/
+
+# ── IDE ──
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ── OS ──
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Environment & secrets (SEC-6, GIT-5) ──
+.env
+.env.*
+!.env.example
+
+# ── Models, datasets, large binaries (GIT-5) ──
+engine/models/*.json
+engine/models/*.ubj
+engine/models/*.pkl
+engine/models/*.joblib
+datasets/
+*.pcap
+*.pcapng
+
+# ── Docker ──
+docker-compose.override.yml
+
+# ── Coverage & test artifacts ──
+htmlcov/
+.coverage
+.coverage.*
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# ── Benchmark output ──
+bench/results/
+
+# ── Logs ──
+*.log
+logs/
