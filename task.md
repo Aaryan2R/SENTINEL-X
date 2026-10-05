@@ -4,7 +4,7 @@
 > Update status here in the same PR as the work. Rules: `rules.md`. Structure: `architecture.md`.
 
 **Legend**
-- Status: `[ ]` todo, `[~]` in progress, `[x]` done, `[!]` blocked
+- Status: `[ ]` not fully complete, `[x]` fully implemented and tested
 - Size: **S** (about half a day or less), **M** (1 to 2 days), **L** (3 days or more). Sizes are rough planning guesses, not commitments.
 - Priority: **P0** required for the MVP demo, **P1** important, **P2** stretch
 - `FR-xx` refers to PRD functional requirements. `Dep:` lists task IDs that must be done first.
@@ -75,12 +75,12 @@ Goal: scan, DDoS, SYN flood and DGA detection with explained alerts on a live da
 
 Goal: passivity and visibility are measurable and visible in the UI.
 
-- [~] **T-030** Passivity monitor: Linux TX counter and policy hash are live; tc/nftables/capability/socket collectors and persistence remain. FR-30. P0, M. Dep: T-006
-- [~] **T-031** Dashboard shows live TX-counter values when `SENTINEL_CAPTURE_INTERFACE` is configured on Linux and explicitly labels Windows as emulated; full attestation panel still depends on T-030. FR-30. P0, M. Dep: T-030, T-026
+- [ ] **T-030** Passivity monitor: Linux TX counter and policy hash are live; tc/nftables/capability/socket collectors and persistence remain. FR-30. P0, M. Dep: T-006
+- [ ] **T-031** Dashboard shows live TX-counter values when `SENTINEL_CAPTURE_INTERFACE` is configured on Linux and explicitly labels Windows as emulated; full attestation panel still depends on T-030. FR-30. P0, M. Dep: T-030, T-026
 - [ ] **T-032** Lab-only outbound self-test (disabled by default; result recorded). FR-31. P1, M. Dep: T-030
-- [~] **T-033** Sequence-gap and queue-lag tracking are live; Zeek capture-loss/interface-drop log parsing remains. FR-32. P0, M. Dep: T-011
+- [ ] **T-033** Sequence-gap and queue-lag tracking are live; Zeek capture-loss/interface-drop log parsing remains. FR-32. P0, M. Dep: T-011
 - [x] **T-034** Visibility Health computation and confidence modifier wiring. FR-32. P0, M. Dep: T-033, T-023
-- [~] **T-035** Queue-lag shedding state is implemented; detector disabling and durable shed records remain. P0, M. Dep: T-034, T-018
+- [ ] **T-035** Queue-lag shedding state is implemented; detector disabling and durable shed records remain. P0, M. Dep: T-034, T-018
 - [x] **T-036** Deterministic loss-injection tooling in the replayer and launcher (`--loss-rate`, including 1%, 5%, and 10% demonstrations). P0, M. Dep: T-007, T-034
 - [x] **T-037** Dashboard health/passivity strip displays visibility and passivity state. P0, S. Dep: T-031, T-034
 
@@ -94,7 +94,7 @@ Goal: C2 detection, behavioural ML, incidents with explanations.
 
 - [ ] **T-040** C2 beaconing detector: dominant-period fraction, autocorrelation peak, size consistency; jitter-robust; scenario and Red Team variants. FR-16. P0, L. Dep: T-017, T-018
 - [x] **T-041** Shared metadata-only feature module for training and inference (ARC-7). P0, M. Dep: T-010
-- [~] **T-042** Provenance-aware CSV loader and hash-checked JSON centroid baseline are implemented; Isolation Forest, Random Forest/XGBoost, calibration, and signed production artefacts remain. FR-19. P0, L. Dep: T-041
+- [ ] **T-042** Provenance-aware CSV loader and hash-checked JSON centroid baseline are implemented; Isolation Forest, Random Forest/XGBoost, calibration, and signed production artefacts remain. FR-19. P0, L. Dep: T-041
 - [ ] **T-043** Behavioural ML scorer in workers (versioned models, calibrated scores). FR-19. P0, M. Dep: T-042, T-018
 - [ ] **T-044** Signal grouping and fusion (group max, noisy-OR, visibility modifier) with unit tests. FR-21. P0, M. Dep: T-023, T-034
 - [ ] **T-045** Explainer: SHAP (async, above threshold), rule contributions, group marginal contributions; additivity smoke test. FR-22. P0, L. Dep: T-043, T-044
@@ -114,7 +114,7 @@ Goal: C2 detection, behavioural ML, incidents with explanations.
 Goal: tamper evidence, evasion scorecard, benchmark and a rehearsed demo.
 
 - [ ] **T-060** Evidence writer: single writer, canonical JSON, `prev_hash`, advisory lock, Merkle roots. FR-33. P1, L. Dep: T-024, T-023
-- [~] **T-061** Local verification routine, API endpoint, dashboard control, and tamper-detection tests are complete; CLI, durable-record editing demo, and Merkle-root verification remain. FR-33. P1, M. Dep: T-060
+- [ ] **T-061** Local verification routine, API endpoint, dashboard control, and tamper-detection tests are complete; CLI, durable-record editing demo, and Merkle-root verification remain. FR-33. P1, M. Dep: T-060
 - [ ] **T-062** Replay UI: choose scenario, duration, rate; seeded and deterministic; no external network. FR-50. P0, L. Dep: T-007, T-025
 - [ ] **T-063** Traffic generator v2: every in-scope attack class, labelled; scenario library. FR-51. P0, L. Dep: T-007
 - [ ] **T-064** Red Team mode: evasive variants (jittered beacons, low-and-slow scan, wordlist DGA, slow tunnelling) and detection-rate scorecard. FR-52. P1, L. Dep: T-063, T-040, T-019, T-022, T-050
