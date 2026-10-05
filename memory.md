@@ -38,6 +38,7 @@
 | 2026-10-05 | T-004 done: sensor Dockerfile (Zeek 9.0 multi-stage, JA4, JSON logs, non-root). Digest pin deferred to Linux build. |
 | 2026-10-05 | T-008 done: hello-flow pipeline — normaliser, FastAPI, dashboard flow table. 6 tests pass, lint/mypy clean. Full stack needs Linux. |
 | 2026-10-05 | T-009 done: GitHub Actions CI — engine (ruff/mypy/pytest) + frontend (tsc+build). Regression and TX=0 stubs. |
+| 2026-10-05 | T-010 done: Pydantic schemas v1.0 — FlowRecord (DNS/TLS), Signal (score bounds, mandatory evidence), Alert (hash chain). 12 tests. |
 
 ## 4. Locked decisions (summary)
 

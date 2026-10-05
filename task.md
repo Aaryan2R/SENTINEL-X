@@ -38,7 +38,7 @@ Goal: the services start and one replayed flow reaches the dashboard.
 Goal: scan, DDoS, SYN flood and DGA detection with explained alerts on a live dashboard.
 
 ### Ingestion and streaming
-- [ ] **T-010** Define Pydantic schemas: flow, signal, alert (schema v1.0). FR-40. P0, S. Dep: T-002
+- [x] **T-010** Define Pydantic schemas: flow, signal, alert (schema v1.0). FR-40. P0, S. Dep: T-002
 - [ ] **T-011** Normaliser: parse Zeek JSON logs (conn, dns, ssl), map to flow schema, add `seq` and event time, publish to src and dst streams. FR-01, FR-03. P0, M. Dep: T-010, T-008
 - [ ] **T-012** Stream layer: bounded streams, consumer groups, shard assignment, dead-letter stream and counters. FR-03. P0, M. Dep: T-011
 - [ ] **T-013** Bus interface abstraction so Redis can be swapped later (ARC-6). P0, S. Dep: T-012
