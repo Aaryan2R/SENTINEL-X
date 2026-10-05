@@ -93,8 +93,8 @@ Goal: passivity and visibility are measurable and visible in the UI.
 Goal: C2 detection, behavioural ML, incidents with explanations.
 
 - [ ] **T-040** C2 beaconing detector: dominant-period fraction, autocorrelation peak, size consistency; jitter-robust; scenario and Red Team variants. FR-16. P0, L. Dep: T-017, T-018
-- [ ] **T-041** Shared feature module for training and inference (ARC-7). P0, M. Dep: T-010
-- [ ] **T-042** Offline training pipeline: datasets loader, Isolation Forest, Random Forest/XGBoost, calibration, model artefact format (native XGBoost, no unsigned pickles). FR-19. P0, L. Dep: T-041
+- [x] **T-041** Shared metadata-only feature module for training and inference (ARC-7). P0, M. Dep: T-010
+- [~] **T-042** Provenance-aware CSV loader and hash-checked JSON centroid baseline are implemented; Isolation Forest, Random Forest/XGBoost, calibration, and signed production artefacts remain. FR-19. P0, L. Dep: T-041
 - [ ] **T-043** Behavioural ML scorer in workers (versioned models, calibrated scores). FR-19. P0, M. Dep: T-042, T-018
 - [ ] **T-044** Signal grouping and fusion (group max, noisy-OR, visibility modifier) with unit tests. FR-21. P0, M. Dep: T-023, T-034
 - [ ] **T-045** Explainer: SHAP (async, above threshold), rule contributions, group marginal contributions; additivity smoke test. FR-22. P0, L. Dep: T-043, T-044

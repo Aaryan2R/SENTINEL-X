@@ -93,10 +93,31 @@ npm run dev
 - one-command Windows launcher: `scripts/demo.ps1`
 - measured scenario runner: `python scripts/evaluate_demo.py --seed 42`
 - Linux TX proof wrapper: `python scripts/assert_tx_zero.py --interface <iface> ...`
+- metadata model training: `python scripts/train_model.py --input SOURCE=flows.csv`
+- real-flow metadata replay: `python traffic/replay/replay_csv.py flows.csv`
 
 While the API is running, `GET /api/evidence/verify` recomputes every stored alert
 hash and predecessor link. The dashboard's **VERIFY CHAIN** button shows the same
 result and identifies the first failed alert.
+
+## Authorized real-data track
+
+To train or replay real captures, first convert them outside this repository to
+flow metadata CSV. The CSV must be acquired lawfully and contain a `label` plus
+the flow fields documented in [DATASETS.md](docs/DATASETS.md). Then run:
+
+```powershell
+$env:PYTHONPATH = "$PWD\engine"
+python scripts\train_model.py --input CIC-IDS2017=C:\authorized\cic_flows.csv
+python traffic\replay\replay_csv.py C:\authorized\cic_flows.csv
+```
+
+The trainer records source names, row counts, SHA-256 checksums, and timestamps
+in the model manifest. Raw PCAPs, credentials, DGA lists, and third-party
+tool output stay outside Git. The current API still uses deterministic rules;
+the JSON model is an offline baseline and is not silently activated for live
+decisions until calibration, independent evaluation, and signed deployment are
+complete.
 
 ## Repository layout
 

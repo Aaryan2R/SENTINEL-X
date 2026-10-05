@@ -44,3 +44,18 @@ isolated lab.
 The next dataset milestone is T-042/T-070 in `task.md`: a provenance-aware
 offline loader and cross-dataset evaluation. Until that work is implemented,
 the SIH claims are limited to the three seeded synthetic scenarios above.
+
+## First training/replay slice
+
+The repository now includes a dependency-light metadata baseline:
+
+```powershell
+$env:PYTHONPATH = "$PWD\engine"
+python scripts\train_model.py --input SOURCE=C:\authorized\flows.csv
+python traffic\replay\replay_csv.py C:\authorized\flows.csv
+```
+
+It accepts common CIC-style column aliases, writes a hash-checked JSON model
+under the ignored `datasets/` directory by default, and never reads packet
+payloads. This is an offline experiment and live API replay path—not a claim
+that a model trained on one public dataset generalizes to another.
