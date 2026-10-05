@@ -126,6 +126,7 @@ sentinel-x/
 - [SIH submission guide](docs/SIH_SUBMISSION.md) — verified demo story and claim boundaries
 - [Measured evaluation](docs/EVALUATION.md) — reproducible scenario metrics and TX proof
 - [Judge brief](docs/JUDGE_BRIEF.md) — 90-second pitch and live demo sequence
+- [Traffic and dataset sources](docs/DATASETS.md) — provenance, official links, and safe ingestion policy
 
 ## Licence
 

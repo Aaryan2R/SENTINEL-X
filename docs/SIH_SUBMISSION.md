@@ -17,6 +17,10 @@ The local demo stores state in memory and is intended for Windows, Linux, and
 WSL. It is a software emulation of a one-way monitoring boundary, not a claim
 of a hardware data diode.
 
+The planned traffic-source expansion is documented in
+[DATASETS.md](DATASETS.md). Third-party captures and DGA lists are not bundled;
+the current measured claims use only the checked-in seeded scenarios.
+
 ## Claims we can make
 
 - A seeded benign replay remains quiet.
