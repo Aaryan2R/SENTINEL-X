@@ -32,6 +32,7 @@
 | 2026-10-05 | T-001 done: repo layout initialised per architecture.md §14; .gitignore, .env.example, README; docs moved to docs/. |
 | 2026-10-05 | T-002 done: uv project (Python 3.14), ruff+mypy+pytest configured, lockfile committed. All checks pass. |
 | 2026-10-05 | T-003 done: React 19 + TS strict + Vite 8.3 + Tailwind 4 scaffold. Build clean. |
+| 2026-10-05 | T-005 done: compose.yaml with core/demo profiles, enclave_net internal, all services hardened. Config validates. |
 
 ## 4. Locked decisions (summary)
 
