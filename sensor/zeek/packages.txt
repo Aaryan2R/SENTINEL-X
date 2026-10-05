@@ -1,0 +1,7 @@
+# SENTINEL-X Zeek packages
+# Installed at image build time via zkg (INV-4: no network at runtime)
+# One package per line. Lines starting with # are comments.
+
+# JA4 TLS fingerprinting (ADR-001, memory.md licensing note)
+# Only the TLS client fingerprint is claimed patent-free by FoxIO
+zeek/foxio/ja4

@@ -34,6 +34,7 @@
 | 2026-10-05 | T-003 done: React 19 + TS strict + Vite 8.3 + Tailwind 4 scaffold. Build clean. |
 | 2026-10-05 | T-005 done: compose.yaml with core/demo profiles, enclave_net internal, all services hardened. Config validates. |
 | 2026-10-05 | T-006 done: netns/tc/nftables scripts + orchestrators. Bash syntax valid. Needs Linux to run. |
+| 2026-10-05 | T-007 done: Scapy traffic generator (normal+scan), fully deterministic (hash-verified). Separate uv project. Gotcha: Scapy RandMAC/IP id/TCP seq/pkt.time all need explicit seeding. |
 
 ## 4. Locked decisions (summary)
 
