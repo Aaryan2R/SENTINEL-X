@@ -33,6 +33,11 @@ npm run dev
 python traffic/replay/demo_replay.py --scenario port_scan
 ```
 
+For a one-command PowerShell demo, run `.\scripts\demo.ps1 -InstallFrontend`
+from the repository root. It starts the API and dashboard, waits for the API
+health check, and replays the selected scenario. Use
+`-Scenario normal` or `-Scenario syn_flood` to change the replay.
+
 If the API reports `ModuleNotFoundError: No module named 'sentinel'`, confirm
 the terminal is at the repository root and set `PYTHONPATH` as shown above.
 Also make sure you are running the checkout containing the Phase 1 changes;
@@ -67,6 +72,7 @@ npm run dev
 - REST endpoints for flows, alerts, alert detail, stats, reset, plus a live WebSocket stream
 - dashboard panels for passivity, visibility health, live flows, detections, and evidence detail
 - deterministic replay scripts and a benign no-alert path
+- one-command Windows launcher: `scripts/demo.ps1`
 
 ## Repository layout
 
@@ -93,6 +99,7 @@ sentinel-x/
 - [Rules](rules.md) — project invariants and coding rules
 - [Tasks](task.md) — phased work breakdown
 - [Memory](memory.md) — persistent project context
+- [SIH submission guide](docs/SIH_SUBMISSION.md) — verified demo story and claim boundaries
 
 ## Licence
 

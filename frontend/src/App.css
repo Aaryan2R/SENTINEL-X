@@ -3,6 +3,10 @@
 .shell { max-width: 1440px; margin: auto; padding: 40px 5vw 64px; }
 .header, .panel-title, .metrics, .grid, .alert, .attestation { display: flex; }
 .header { justify-content: space-between; align-items: flex-start; gap: 24px; margin-bottom: 34px; }
+.header-actions { display: flex; align-items: flex-end; gap: 10px; flex-direction: column; }
+.reset { border: 1px solid #31505e; background: #10212a; color: #9db2bc; padding: 10px 12px; font: inherit; font-size: 10px; letter-spacing: .08em; cursor: pointer; }
+.reset:hover:not(:disabled) { border-color: #53e6ad; color: #53e6ad; }
+.reset:disabled { cursor: wait; opacity: .6; }
 h1 { letter-spacing: .16em; margin: 4px 0; font-size: clamp(2rem, 5vw, 4rem); color: #e8f3f8; } h1 span { color: #37e0a0; }
 .eyebrow, .panel-title span, th, small { font-size: 10px; letter-spacing: .12em; color: #72909e; } .muted { color: #72909e; font-size: 12px; }
 .attestation { flex-direction: column; gap: 8px; border: 1px solid #236a55; padding: 14px 18px; color: #53e6ad; background: #0b231c; font-size: 12px; }

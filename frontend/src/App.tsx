@@ -21,6 +21,7 @@ function App() {
   const [stats, setStats] = useState<Stats>({ flow_count: 0, alert_count: 0, threat_counts: {}, passivity: { tx_packets: 0, status: 'verified' }, visibility_health: 1 })
   const [selected, setSelected] = useState<Alert | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [resetting, setResetting] = useState(false)
 
   const refresh = async () => {
     try {
@@ -38,12 +39,25 @@ function App() {
     return () => { clearInterval(timer); socket.close() }
   }, [])
 
+  const resetDemo = async () => {
+    setResetting(true)
+    try {
+      await fetch(`${API_BASE}/api/demo/reset`, { method: 'POST' })
+      setSelected(null)
+      await refresh()
+    } catch {
+      setError('Could not reset the demo')
+    } finally {
+      setResetting(false)
+    }
+  }
+
   const threatSummary = useMemo(() => Object.entries(stats.threat_counts), [stats.threat_counts])
   return (
     <main className="shell">
       <header className="header">
         <div><p className="eyebrow">PASSIVE NETWORK TELEMETRY</p><h1>SENTINEL<span>-X</span></h1><p className="muted">Phase 1 detection console · metadata only · offline demo</p></div>
-        <div className="attestation"><b>● PASSIVITY VERIFIED</b><small>TX packets: {stats.passivity.tx_packets}</small></div>
+        <div className="header-actions"><div className="attestation"><b>● PASSIVITY VERIFIED</b><small>TX packets: {stats.passivity.tx_packets}</small></div><button className="reset" onClick={resetDemo} disabled={resetting}>{resetting ? 'RESETTING…' : 'RESET DEMO'}</button></div>
       </header>
       <section className="metrics">
         <Metric label="Flows observed" value={stats.flow_count} />
