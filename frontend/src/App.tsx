@@ -8,17 +8,18 @@ type Flow = {
 }
 type Alert = {
   alert_id: string; timestamp: string; source_ip: string; threat_class: string
-  severity: string; confidence: number; evidence: Record<string, unknown>
+  severity: string; confidence: number; attack_technique: string; detector_version: string
+  evidence_hash: string; prev_hash: string; evidence: Record<string, unknown>
   explanation: { signal: string; contribution: number; details?: string }[]
 }
-type Stats = { flow_count: number; alert_count: number; threat_counts: Record<string, number>; passivity: { tx_packets: number; status: string }; visibility_health: number }
+type Stats = { flow_count: number; alert_count: number; threat_counts: Record<string, number>; passivity: { tx_packets: number; status: string; mode: string; interface: string | null }; visibility_health: number }
 
 const API_BASE = import.meta.env.VITE_API_URL ?? 'http://localhost:8000'
 
 function App() {
   const [flows, setFlows] = useState<Flow[]>([])
   const [alerts, setAlerts] = useState<Alert[]>([])
-  const [stats, setStats] = useState<Stats>({ flow_count: 0, alert_count: 0, threat_counts: {}, passivity: { tx_packets: 0, status: 'verified' }, visibility_health: 1 })
+  const [stats, setStats] = useState<Stats>({ flow_count: 0, alert_count: 0, threat_counts: {}, passivity: { tx_packets: 0, status: 'emulated', mode: 'software-emulation', interface: null }, visibility_health: 1 })
   const [selected, setSelected] = useState<Alert | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [resetting, setResetting] = useState(false)
@@ -56,8 +57,8 @@ function App() {
   return (
     <main className="shell">
       <header className="header">
-        <div><p className="eyebrow">PASSIVE NETWORK TELEMETRY</p><h1>SENTINEL<span>-X</span></h1><p className="muted">Phase 1 detection console · metadata only · offline demo</p></div>
-        <div className="header-actions"><div className="attestation"><b>● PASSIVITY VERIFIED</b><small>TX packets: {stats.passivity.tx_packets}</small></div><button className="reset" onClick={resetDemo} disabled={resetting}>{resetting ? 'RESETTING…' : 'RESET DEMO'}</button></div>
+        <div><p className="eyebrow">PASSIVE NETWORK TELEMETRY</p><h1>SENTINEL<span>-X</span></h1><p className="muted">Phase 1 detection console · metadata only · software-emulated passive monitoring demo</p></div>
+        <div className="header-actions"><div className={`attestation ${stats.passivity.status}`}><b>● {stats.passivity.status === 'verified' ? 'PASSIVITY VERIFIED' : 'PASSIVITY EMULATED'}</b><small>TX packets: {stats.passivity.tx_packets} · {stats.passivity.mode}</small></div><button className="reset" onClick={resetDemo} disabled={resetting}>{resetting ? 'RESETTING…' : 'RESET DEMO'}</button></div>
       </header>
       <section className="metrics">
         <Metric label="Flows observed" value={stats.flow_count} />
@@ -78,7 +79,7 @@ function App() {
           {!alerts.length && <p className="empty">No alerts. Benign traffic should remain quiet.</p>}
         </div>
       </section>
-      {selected && <section className="panel detail"><div className="panel-title"><h2>{selected.threat_class.replace('_', ' ')} evidence</h2><button onClick={() => setSelected(null)}>CLOSE</button></div><p><b>Source:</b> {selected.source_ip} · <b>Confidence:</b> {Math.round(selected.confidence * 100)}%</p><pre>{JSON.stringify({ evidence: selected.evidence, explanation: selected.explanation }, null, 2)}</pre></section>}
+      {selected && <section className="panel detail"><div className="panel-title"><h2>{selected.threat_class.replace('_', ' ')} evidence</h2><button onClick={() => setSelected(null)}>CLOSE</button></div><p><b>Source:</b> {selected.source_ip} · <b>Confidence:</b> {Math.round(selected.confidence * 100)}% · <b>ATT&CK:</b> {selected.attack_technique} · <b>Detector:</b> {selected.detector_version}</p><pre>{JSON.stringify({ evidence: selected.evidence, explanation: selected.explanation, evidence_hash: selected.evidence_hash, prev_hash: selected.prev_hash }, null, 2)}</pre></section>}
     </main>
   )
 }

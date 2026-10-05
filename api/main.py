@@ -16,9 +16,11 @@ from fastapi.middleware.cors import CORSMiddleware
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "engine"))
 
-from sentinel.common import Alert, FlowRecord  # noqa: E402
-from sentinel.correlator import Correlator  # noqa: E402
-from sentinel.detector import DetectorEngine  # noqa: E402
+from api.passivity import snapshot
+
+from sentinel.common import Alert, FlowRecord
+from sentinel.correlator import Correlator
+from sentinel.detector import DetectorEngine
 
 app = FastAPI(title="SENTINEL-X API", version="1.0.0")
 app.add_middleware(
@@ -85,7 +87,7 @@ async def stats() -> dict[str, object]:
         "alert_count": len(_alerts),
         "threat_counts": by_type,
         "top_sources": sorted(top_sources.items(), key=lambda item: item[1], reverse=True)[:5],
-        "passivity": {"tx_packets": 0, "status": "verified"},
+        "passivity": snapshot(),
         "visibility_health": 1.0,
     }
 

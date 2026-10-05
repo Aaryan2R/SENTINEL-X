@@ -11,6 +11,11 @@
 
 **Current focus:** Phase 1 demo slice complete; production adapters and trust hardening remain.
 
+**SIH submission hardening:** complete for the local demo. The Windows
+launcher, three-scenario evaluation runner, alert evidence display, explicit
+software-emulation labeling, and Linux TX-counter assertion are implemented.
+This does not close the production Phase 2/4 work below.
+
 **Owners and dates:** assign owners and fill target dates when the team schedule is known (`Owner: ___`, `Target: ___`).
 
 ---
@@ -71,7 +76,7 @@ Goal: scan, DDoS, SYN flood and DGA detection with explained alerts on a live da
 Goal: passivity and visibility are measurable and visible in the UI.
 
 - [ ] **T-030** Passivity monitor: read TX counters, tc drop stats, nftables policy hash, capabilities, open sockets; store samples. FR-30. P0, M. Dep: T-006
-- [ ] **T-031** Attestation panel in the dashboard (live values from the host, not static text). FR-30. P0, M. Dep: T-030, T-026
+- [~] **T-031** Dashboard shows live TX-counter values when `SENTINEL_CAPTURE_INTERFACE` is configured on Linux and explicitly labels Windows as emulated; full attestation panel still depends on T-030. FR-30. P0, M. Dep: T-030, T-026
 - [ ] **T-032** Lab-only outbound self-test (disabled by default; result recorded). FR-31. P1, M. Dep: T-030
 - [ ] **T-033** Zeek capture-loss and stats log parsing; interface drop and sequence gap tracking; queue lag. FR-32. P0, M. Dep: T-011
 - [ ] **T-034** Visibility Health computation and per-detector modifiers (`conf * (1 - s_d * (1 - VH))`). FR-32. P0, M. Dep: T-033, T-023
@@ -130,7 +135,7 @@ Goal: tamper evidence, evasion scorecard, benchmark and a rehearsed demo.
 
 ## Cross-cutting (continuous)
 
-- [ ] **T-080** Keep seeded regression suite current as detectors change (TST-2).
+- [x] **T-080** Keep seeded regression suite current as detectors change (TST-2).
 - [ ] **T-081** Keep `architecture.md`, `memory.md` and ADRs current (DOC-1, DOC-2).
 - [ ] **T-082** Dependency freeze on [date]: stop upgrades, security fixes only (DEP-4).
 - [ ] **T-083** Licence review before any redistribution (Redis 8 licence choice, FoxIO JA4+ terms, GPL demo tools).

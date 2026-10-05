@@ -43,9 +43,12 @@ the terminal is at the repository root and set `PYTHONPATH` as shown above.
 Also make sure you are running the checkout containing the Phase 1 changes;
 the separate `Downloads\SENTINEL-X` checkout may still point at `main`.
 
-The `normal` scenario is a benign regression (no alerts); `syn_flood` produces
-an explained SYN-flood alert. The demo is metadata-only and keeps state in
-memory so it runs on Windows, Linux, and WSL without Redis or PostgreSQL.
+The `normal` scenario is a benign regression (zero alerts); `port_scan` and
+`syn_flood` produce predictable explained alerts. The demo is metadata-only,
+software-emulated passive monitoring and keeps state in memory, so it runs on
+Windows, Linux, and WSL without Redis or PostgreSQL. On Linux, set
+`SENTINEL_CAPTURE_INTERFACE` to expose the kernel TX counter; Windows displays
+the passivity status as emulated rather than claiming a hardware guarantee.
 `docker compose --profile demo up --build` remains available for the hardened
 service layout; the sensor/netns passivity emulation requires Linux.
 
@@ -73,6 +76,8 @@ npm run dev
 - dashboard panels for passivity, visibility health, live flows, detections, and evidence detail
 - deterministic replay scripts and a benign no-alert path
 - one-command Windows launcher: `scripts/demo.ps1`
+- measured scenario runner: `python scripts/evaluate_demo.py --seed 42`
+- Linux TX proof wrapper: `python scripts/assert_tx_zero.py --interface <iface> ...`
 
 ## Repository layout
 
@@ -100,6 +105,7 @@ sentinel-x/
 - [Tasks](task.md) — phased work breakdown
 - [Memory](memory.md) — persistent project context
 - [SIH submission guide](docs/SIH_SUBMISSION.md) — verified demo story and claim boundaries
+- [Measured evaluation](docs/EVALUATION.md) — reproducible scenario metrics and TX proof
 
 ## Licence
 

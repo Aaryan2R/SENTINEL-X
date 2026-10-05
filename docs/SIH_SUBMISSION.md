@@ -4,7 +4,8 @@
 
 1. Start the complete local demo with `.\scripts\demo.ps1 -InstallFrontend`.
 2. Open `http://localhost:5173`.
-3. Show the passivity panel (`TX packets: 0`) and live flow stream.
+3. Show the passivity panel: Linux reports the selected kernel TX counter;
+   Windows explicitly shows `PASSIVITY EMULATED`.
 4. Replay `normal` to show a benign run with no alerts.
 5. Reset the demo, then replay `port_scan` or `syn_flood`.
 6. Open the alert to show confidence, evidence, computed contributions, ATT&CK
@@ -25,7 +26,7 @@ of a hardware data diode.
 
 ## Claims reserved for future hardening
 
-Linux interface TX counters, tc/nftables enforcement, Redis stream workers,
+tc/nftables enforcement, Redis stream workers,
 PostgreSQL persistence, trained DGA models, full event-time sketch rollups,
 and hardware data-diode guarantees are not part of this local demo. They are
 tracked in `task.md` and should be presented as the engineering roadmap.
