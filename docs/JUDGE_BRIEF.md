@@ -20,6 +20,7 @@ and links every alert to evidence and its predecessor with a SHA-256 chain.
 4. Run the port-scan scenario: open the alert and show score, ATT&CK technique,
    detector version, contributions, `evidence_hash`, and `prev_hash`.
 5. Run the SYN-flood scenario and point to the different detector and evidence.
+6. Click `VERIFY CHAIN` and show `EVIDENCE CHAIN VALID`.
 
 **Close (20 seconds):** The prototype is honest about the boundary: Windows
 uses software emulation, Linux can read the kernel TX counter, and production

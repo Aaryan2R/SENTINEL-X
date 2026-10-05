@@ -72,12 +72,17 @@ npm run dev
 
 - bounded event-time detector state for port scans, SYN floods, volumetric DDoS, and DGA-like DNS
 - deduplicated alerts with severity, evidence, computed contributions, and a SHA-256 evidence chain
+- one-click evidence-chain verification with tamper diagnostics
 - REST endpoints for flows, alerts, alert detail, stats, reset, plus a live WebSocket stream
 - dashboard panels for passivity, visibility health, live flows, detections, and evidence detail
 - deterministic replay scripts and a benign no-alert path
 - one-command Windows launcher: `scripts/demo.ps1`
 - measured scenario runner: `python scripts/evaluate_demo.py --seed 42`
 - Linux TX proof wrapper: `python scripts/assert_tx_zero.py --interface <iface> ...`
+
+While the API is running, `GET /api/evidence/verify` recomputes every stored alert
+hash and predecessor link. The dashboard's **VERIFY CHAIN** button shows the same
+result and identifies the first failed alert.
 
 ## Repository layout
 

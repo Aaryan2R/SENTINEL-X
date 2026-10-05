@@ -65,7 +65,7 @@ Goal: scan, DDoS, SYN flood and DGA detection with explained alerts on a live da
 - [x] **T-023** Correlator v0: dedupe, severity mapping, evidence hash chain, alert emission. P0, M. Dep: T-018
 - [x] **T-024** PostgreSQL schema migration and offline-safe repository for alerts, incidents, and samples. P0, M. Dep: T-010
 - [x] **T-025** API: alerts, alert detail, stats summary, WebSocket live stream. FR-41. P0, M. Dep: T-023
-- [x] **T-026** Dashboard v0: live traffic, active alerts, threat-type counts, passivity, and alert evidence. FR-42, FR-43. P0, L. Dep: T-025, T-003
+- [x] **T-026** Dashboard v0: live traffic, active alerts, threat-type counts, passivity, alert evidence, and local evidence-chain verification. FR-42, FR-43. P0, L. Dep: T-025, T-003
 
 **Exit criteria:** local replay shows scan and flood alerts with evidence; benign replay produces no alerts. Redis/PostgreSQL worker adapters and measured latency remain follow-up work.
 

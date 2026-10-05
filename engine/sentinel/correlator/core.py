@@ -54,3 +54,22 @@ class Correlator:
             self._previous_hash = evidence_hash
             alerts.append(alert)
         return alerts
+
+
+def verify_alert_chain(alerts: list[Alert]) -> dict[str, object]:
+    """Verify alert evidence hashes in chronological chain order."""
+    previous = "0" * 64
+    ordered = sorted(alerts, key=lambda alert: alert.timestamp)
+    for index, alert in enumerate(ordered):
+        evidence = {"signal": alert.evidence["signal"], "window": alert.evidence["window"]}
+        canonical = json.dumps(evidence, sort_keys=True, separators=(",", ":"))
+        expected = hashlib.sha256(f"{canonical}{previous}".encode()).hexdigest()
+        if alert.prev_hash != previous or alert.evidence_hash != expected:
+            return {
+                "valid": False,
+                "checked": index + 1,
+                "total": len(ordered),
+                "failed_alert_id": alert.alert_id,
+            }
+        previous = alert.evidence_hash
+    return {"valid": True, "checked": len(ordered), "total": len(ordered)}

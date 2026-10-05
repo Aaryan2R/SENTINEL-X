@@ -33,6 +33,10 @@ The script fails if the selected interface TX counter changes. On Windows,
 the dashboard deliberately labels passivity as `software-emulation`; it does
 not claim a kernel counter or hardware data-diode guarantee.
 
+Evidence integrity can be checked with `GET /api/evidence/verify`, or with the
+dashboard's **VERIFY CHAIN** control. The response identifies the first alert
+that fails predecessor or recomputed-hash validation.
+
 Loss injection is available for visibility demonstrations:
 
 ```powershell

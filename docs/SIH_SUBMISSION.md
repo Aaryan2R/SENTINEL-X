@@ -10,6 +10,7 @@
 5. Reset the demo, then replay `port_scan` or `syn_flood`.
 6. Open the alert to show confidence, evidence, computed contributions, ATT&CK
    technique, and the evidence hash chain fields.
+7. Click **VERIFY CHAIN** and show that the complete chain is valid.
 
 The replay is deterministic in shape and uses metadata-only synthetic flows.
 The local demo stores state in memory and is intended for Windows, Linux, and
@@ -21,6 +22,7 @@ of a hardware data diode.
 - A seeded benign replay remains quiet.
 - Seeded scan and SYN-flood replays produce explained alerts.
 - Alert evidence is linked with SHA-256 `evidence_hash` and `prev_hash` values.
+- The chain can be independently recomputed through the API or dashboard.
 - The dashboard exposes the demo passivity status and visibility health.
 - The API, dashboard, replay, and detector tests are reproducible offline.
 

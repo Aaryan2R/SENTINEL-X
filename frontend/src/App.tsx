@@ -23,6 +23,7 @@ function App() {
   const [selected, setSelected] = useState<Alert | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [resetting, setResetting] = useState(false)
+  const [chainStatus, setChainStatus] = useState<{ valid: boolean; checked: number } | null>(null)
 
   const refresh = async () => {
     try {
@@ -45,11 +46,22 @@ function App() {
     try {
       await fetch(`${API_BASE}/api/demo/reset`, { method: 'POST' })
       setSelected(null)
+      setChainStatus(null)
       await refresh()
     } catch {
       setError('Could not reset the demo')
     } finally {
       setResetting(false)
+    }
+  }
+
+  const verifyChain = async () => {
+    try {
+      const response = await fetch(`${API_BASE}/api/evidence/verify`)
+      const result: { valid: boolean; checked: number } = await response.json()
+      setChainStatus(result)
+    } catch {
+      setError('Could not verify the evidence chain')
     }
   }
 
@@ -78,11 +90,12 @@ function App() {
             {!flows.length && <tr><td colSpan={5} className="empty">No flows yet. Run the seeded replay.</td></tr>}
           </tbody></table></div>
         </div>
-        <div className="panel"><div className="panel-title"><h2>Detections</h2><span>{alerts.length} TOTAL</span></div>
+        <div className="panel"><div className="panel-title"><h2>Detections</h2><div className="panel-actions"><span>{alerts.length} TOTAL</span><button className="verify" onClick={verifyChain}>VERIFY CHAIN</button></div></div>
           {alerts.map((alert) => <button className={`alert ${alert.severity.toLowerCase()}`} key={alert.alert_id} onClick={() => setSelected(alert)}><div><b>{alert.threat_class.replace('_', ' ')}</b><small>{alert.source_ip} · {new Date(alert.timestamp).toLocaleTimeString()}</small></div><strong>{Math.round(alert.confidence * 100)}%</strong></button>)}
           {!alerts.length && <p className="empty">No alerts. Benign traffic should remain quiet.</p>}
         </div>
       </section>
+      {chainStatus && <div className={`chain-result ${chainStatus.valid ? 'valid' : 'invalid'}`}>{chainStatus.valid ? '✓ EVIDENCE CHAIN VALID' : '✕ EVIDENCE CHAIN FAILED'} · {chainStatus.checked} alert(s) checked</div>}
       {selected && <section className="panel detail"><div className="panel-title"><h2>{selected.threat_class.replace('_', ' ')} evidence</h2><button onClick={() => setSelected(null)}>CLOSE</button></div><p><b>Source:</b> {selected.source_ip} · <b>Confidence:</b> {Math.round(selected.confidence * 100)}% · <b>ATT&CK:</b> {selected.attack_technique} · <b>Detector:</b> {selected.detector_version}</p><pre>{JSON.stringify({ evidence: selected.evidence, explanation: selected.explanation, evidence_hash: selected.evidence_hash, prev_hash: selected.prev_hash }, null, 2)}</pre></section>}
       <footer className="footer">SENTINEL-X · receive-only by design · payloads are never inspected or decrypted · demo state is in memory</footer>
     </main>

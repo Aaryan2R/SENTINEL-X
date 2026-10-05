@@ -19,7 +19,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "engine"))
 from api.passivity import snapshot
 
 from sentinel.common import Alert, FlowRecord
-from sentinel.correlator import Correlator
+from sentinel.correlator import Correlator, verify_alert_chain
 from sentinel.detector import DetectorEngine
 from sentinel.monitor import VisibilityMonitor
 from sentinel.storage import Repository, create_repository, records
@@ -82,6 +82,12 @@ async def get_alert(alert_id: str) -> Alert:
     from fastapi import HTTPException
 
     raise HTTPException(status_code=404, detail="Alert not found")
+
+
+@app.get("/api/evidence/verify")
+async def verify_evidence() -> dict[str, object]:
+    """Verify the complete in-scope alert evidence chain."""
+    return verify_alert_chain(_repository.list_alerts(1000))
 
 
 @app.get("/api/stats")
