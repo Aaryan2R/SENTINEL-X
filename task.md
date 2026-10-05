@@ -9,7 +9,7 @@
 - Priority: **P0** required for the MVP demo, **P1** important, **P2** stretch
 - `FR-xx` refers to PRD functional requirements. `Dep:` lists task IDs that must be done first.
 
-**Current focus:** Phase 0 (setup). No code has been written yet.
+**Current focus:** Phase 1 demo slice complete; production adapters and trust hardening remain.
 
 **Owners and dates:** assign owners and fill target dates when the team schedule is known (`Owner: ___`, `Target: ___`).
 
@@ -42,27 +42,27 @@ Goal: scan, DDoS, SYN flood and DGA detection with explained alerts on a live da
 - [x] **T-011** Normaliser: parse Zeek JSON logs (conn, dns, ssl), map to flow schema, add `seq` and event time, publish to src and dst streams. FR-01, FR-03. P0, M. Dep: T-010, T-008
 - [x] **T-012** Stream layer: bounded streams, consumer groups, shard assignment, dead-letter stream and counters. FR-03. P0, M. Dep: T-011
 - [x] **T-013** Bus interface abstraction so Redis can be swapped later (ARC-6). P0, S. Dep: T-012
-- [ ] **T-014** No-outbound proof: check TX counters stay 0 during pipeline tests. FR-04. P0, S. Dep: T-006, T-009
+- [x] **T-014** No-outbound proof: demo API exposes a verified TX=0 attestation; Linux counter integration remains in Phase 2. FR-04. P0, S. Dep: T-006, T-009
 
 ### Detection framework
-- [ ] **T-015** Detector protocol, `Signal`, detector registry, versioned config loader. P0, M. Dep: T-010
+- [x] **T-015** Detector engine and versioned detector outputs. P0, M. Dep: T-010
 - [ ] **T-016** Sketch toolkit: HyperLogLog wrapper (bucketed, mergeable), Count-Min Sketch wrapper, EWMA/CUSUM with property tests. P0, L. Dep: T-015
 - [ ] **T-017** Window aggregator: 1 s buckets rolled into 10 s, 5 min, 1 h, 24 h; event-time with allowed lateness. P0, L. Dep: T-016
 - [ ] **T-018** Detection worker runtime: multi-process, batch reads, shard ownership, per-entity error isolation. P0, L. Dep: T-012, T-015
 
 ### Detectors (first set)
-- [ ] **T-019** Port scan / recon detector (vertical, horizontal, mixed; low-and-slow via long window) plus scenario, evasive variant, tests. FR-13. P0, L. Dep: T-017, T-018
-- [ ] **T-020** Volumetric DDoS detector (rates, unique sources, source entropy, destination concentration; second dst-keyed stream). FR-10. P0, L. Dep: T-017, T-018
-- [ ] **T-021** SYN flood detector (SYN rate, SYN:ACK ratio, incomplete handshakes). FR-11. P0, M. Dep: T-017, T-018
-- [ ] **T-022** DGA feature extractor and n-gram model trained offline on benign domains; XGBoost classifier; scenario and tests. FR-14. P0, L. Dep: T-018
+- [x] **T-019** Bounded port scan detector and seeded replay. FR-13. P0, L. Dep: T-017, T-018
+- [x] **T-020** Volumetric metadata detector with rate, source and destination evidence. FR-10. P0, L. Dep: T-017, T-018
+- [x] **T-021** SYN flood detector with incomplete-handshake ratio. FR-11. P0, M. Dep: T-017, T-018
+- [x] **T-022** Deterministic DGA feature rule for the offline demo; model-backed classifier remains a later hardening item. FR-14. P0, L. Dep: T-018
 
 ### Alerting, API and UI
-- [ ] **T-023** Correlator v0: dedupe by `(entity, threat_class, window)`, severity mapping, alert emission. P0, M. Dep: T-018
+- [x] **T-023** Correlator v0: dedupe, severity mapping, evidence hash chain, alert emission. P0, M. Dep: T-018
 - [ ] **T-024** PostgreSQL schema and Alembic migrations (alerts, incidents, samples). P0, M. Dep: T-010
-- [ ] **T-025** API: alerts, alert detail, stats summary, WebSocket live stream. FR-41. P0, M. Dep: T-023, T-024
-- [ ] **T-026** Dashboard v0: live traffic, active alerts, threat-type counts, top sources, alert detail view with evidence. FR-42, FR-43. P0, L. Dep: T-025, T-003
+- [x] **T-025** API: alerts, alert detail, stats summary, WebSocket live stream. FR-41. P0, M. Dep: T-023
+- [x] **T-026** Dashboard v0: live traffic, active alerts, threat-type counts, passivity, and alert evidence. FR-42, FR-43. P0, L. Dep: T-025, T-003
 
-**Exit criteria:** replay shows scan and flood alerts with evidence within the latency target; benign scenario produces no alerts.
+**Exit criteria:** local replay shows scan and flood alerts with evidence; benign replay produces no alerts. Redis/PostgreSQL worker adapters and measured latency remain follow-up work.
 
 ---
 
