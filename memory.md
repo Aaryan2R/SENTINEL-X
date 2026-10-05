@@ -35,6 +35,7 @@
 | 2026-10-05 | T-005 done: compose.yaml with core/demo profiles, enclave_net internal, all services hardened. Config validates. |
 | 2026-10-05 | T-006 done: netns/tc/nftables scripts + orchestrators. Bash syntax valid. Needs Linux to run. |
 | 2026-10-05 | T-007 done: Scapy traffic generator (normal+scan), fully deterministic (hash-verified). Separate uv project. Gotcha: Scapy RandMAC/IP id/TCP seq/pkt.time all need explicit seeding. |
+| 2026-10-05 | T-004 done: sensor Dockerfile (Zeek 9.0 multi-stage, JA4, JSON logs, non-root). Digest pin deferred to Linux build. |
 
 ## 4. Locked decisions (summary)
 
