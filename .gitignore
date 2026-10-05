@@ -55,6 +55,7 @@ htmlcov/
 
 # ── Benchmark output ──
 bench/results/
+docs/evaluation/latest.json
 
 # ── Logs ──
 *.log

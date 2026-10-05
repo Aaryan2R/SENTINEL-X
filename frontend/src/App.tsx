@@ -1,113 +1,107 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import './App.css'
 
-interface FlowRecord {
-  uid: string
-  ts: number
-  src_ip: string
-  src_port: number
-  dst_ip: string
-  dst_port: number
-  proto: string
-  service: string | null
-  duration: number | null
-  orig_bytes: number | null
-  resp_bytes: number | null
-  conn_state: string | null
-  seq: number
+type Flow = {
+  uid: string; seq: number; ts_start: number; src_ip: string; src_port: number
+  dst_ip: string; dst_port: number; proto: string; service: string | null
+  conn_state: string | null; orig_bytes: number | null; resp_bytes: number | null
 }
+type Alert = {
+  alert_id: string; timestamp: string; source_ip: string; threat_class: string
+  severity: string; confidence: number; attack_technique: string; detector_version: string
+  evidence_hash: string; prev_hash: string; evidence: Record<string, unknown>
+  explanation: { signal: string; contribution: number; details?: string }[]
+}
+type Stats = { flow_count: number; alert_count: number; threat_counts: Record<string, number>; passivity: { tx_packets: number; status: string; mode: string; interface: string | null }; visibility_health: number }
 
 const API_BASE = import.meta.env.VITE_API_URL ?? 'http://localhost:8000'
 
 function App() {
-  const [flows, setFlows] = useState<FlowRecord[]>([])
+  const [flows, setFlows] = useState<Flow[]>([])
+  const [alerts, setAlerts] = useState<Alert[]>([])
+  const [stats, setStats] = useState<Stats>({ flow_count: 0, alert_count: 0, threat_counts: {}, passivity: { tx_packets: 0, status: 'emulated', mode: 'software-emulation', interface: null }, visibility_health: 1 })
+  const [selected, setSelected] = useState<Alert | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [resetting, setResetting] = useState(false)
+  const [chainStatus, setChainStatus] = useState<{ valid: boolean; checked: number } | null>(null)
 
+  const refresh = async () => {
+    try {
+      const [flowResponse, alertResponse, statsResponse] = await Promise.all([
+        fetch(`${API_BASE}/api/flows?limit=30`), fetch(`${API_BASE}/api/alerts`), fetch(`${API_BASE}/api/stats`),
+      ])
+      setFlows(await flowResponse.json()); setAlerts(await alertResponse.json()); setStats(await statsResponse.json()); setError(null)
+    } catch { setError('API unavailable — start it with: uvicorn api.main:app --reload') }
+  }
   useEffect(() => {
-    const fetchFlows = async () => {
-      try {
-        const res = await fetch(`${API_BASE}/api/flows?limit=20`)
-        if (res.ok) {
-          const data: FlowRecord[] = await res.json()
-          setFlows(data)
-          setError(null)
-        }
-      } catch {
-        setError('API not available')
-      }
-    }
-
-    fetchFlows()
-    const interval = setInterval(fetchFlows, 2000) // FE-3: throttled updates
-    return () => clearInterval(interval)
+    refresh()
+    const timer = setInterval(refresh, 2000)
+    const socket = new WebSocket(API_BASE.replace('http', 'ws') + '/api/ws')
+    socket.onmessage = () => refresh()
+    return () => { clearInterval(timer); socket.close() }
   }, [])
 
+  const resetDemo = async () => {
+    setResetting(true)
+    try {
+      await fetch(`${API_BASE}/api/demo/reset`, { method: 'POST' })
+      setSelected(null)
+      setChainStatus(null)
+      await refresh()
+    } catch {
+      setError('Could not reset the demo')
+    } finally {
+      setResetting(false)
+    }
+  }
+
+  const verifyChain = async () => {
+    try {
+      const response = await fetch(`${API_BASE}/api/evidence/verify`)
+      const result: { valid: boolean; checked: number } = await response.json()
+      setChainStatus(result)
+    } catch {
+      setError('Could not verify the evidence chain')
+    }
+  }
+
+  const threatSummary = useMemo(() => Object.entries(stats.threat_counts), [stats.threat_counts])
   return (
-    <div className="min-h-screen bg-gray-950 text-gray-100 p-6">
-      <header className="mb-8">
-        <h1 className="text-3xl font-bold text-emerald-400">SENTINEL-X</h1>
-        <p className="text-gray-400 text-sm mt-1">Passive Network Threat Detection</p>
+    <main className="shell">
+      <header className="header">
+        <div><p className="eyebrow">PASSIVE NETWORK TELEMETRY</p><h1>SENTINEL<span>-X</span></h1><p className="muted">Phase 1 detection console · metadata only · software-emulated passive monitoring demo</p></div>
+        <div className="header-actions"><div className={`attestation ${stats.passivity.status}`}><b>● {stats.passivity.status === 'verified' ? 'PASSIVITY VERIFIED' : 'PASSIVITY EMULATED'}</b><small>TX packets: {stats.passivity.tx_packets} · {stats.passivity.mode}</small></div><button className="reset" onClick={resetDemo} disabled={resetting}>{resetting ? 'RESETTING…' : 'RESET DEMO'}</button></div>
       </header>
-
-      {/* FE-4: passivity status placeholder */}
-      <div className="mb-6 flex gap-4 text-sm">
-        <span className="px-3 py-1 rounded bg-emerald-900/50 text-emerald-300 border border-emerald-800">
-          TX: 0 (passive)
-        </span>
-        <span className="px-3 py-1 rounded bg-gray-800 text-gray-300 border border-gray-700">
-          Flows: {flows.length}
-        </span>
-      </div>
-
-      {error && (
-        <div className="mb-4 px-4 py-2 rounded bg-yellow-900/30 text-yellow-300 border border-yellow-800 text-sm">
-          {error} — start the API with: uvicorn api.main:app
+      <section className="mission">
+        <div><b>THE ONE-WAY NETWORK PROBLEM</b><p>Conventional IDS tools assume they can communicate back. SENTINEL-X treats the monitoring enclave as receive-only and makes its confidence explainable.</p></div>
+        <div className="pillars"><span>PASSIVITY PROOF</span><span>VISIBILITY HEALTH</span><span>HASH-CHAINED EVIDENCE</span></div>
+      </section>
+      <section className="metrics">
+        <Metric label="Flows observed" value={stats.flow_count} />
+        <Metric label="Active alerts" value={stats.alert_count} accent />
+        <Metric label="Visibility health" value={`${Math.round(stats.visibility_health * 100)}%`} />
+        <Metric label="Threat classes" value={threatSummary.length} />
+      </section>
+      {error && <div className="notice">{error}</div>}
+      <section className="grid">
+        <div className="panel"><div className="panel-title"><h2>Live flow stream</h2><span>RECENT 30</span></div>
+          <div className="table-wrap"><table><thead><tr><th>TIME</th><th>SOURCE</th><th>DESTINATION</th><th>PROTO</th><th>STATE</th></tr></thead><tbody>
+            {flows.map((flow) => <tr key={`${flow.uid}-${flow.seq}`}><td>{new Date(flow.ts_start * 1000).toISOString().slice(11, 19)}</td><td>{flow.src_ip}:{flow.src_port}</td><td>{flow.dst_ip}:{flow.dst_port}</td><td>{flow.proto.toUpperCase()}</td><td>{flow.conn_state ?? '—'}</td></tr>)}
+            {!flows.length && <tr><td colSpan={5} className="empty">No flows yet. Run the seeded replay.</td></tr>}
+          </tbody></table></div>
         </div>
-      )}
-
-      <div className="overflow-x-auto">
-        <table className="w-full text-sm border-collapse">
-          <thead>
-            <tr className="text-left text-gray-400 border-b border-gray-800">
-              <th className="pb-2 pr-4">Seq</th>
-              <th className="pb-2 pr-4">Time</th>
-              <th className="pb-2 pr-4">Source</th>
-              <th className="pb-2 pr-4">Destination</th>
-              <th className="pb-2 pr-4">Proto</th>
-              <th className="pb-2 pr-4">Service</th>
-              <th className="pb-2 pr-4">State</th>
-              <th className="pb-2 pr-4">Bytes ↑</th>
-              <th className="pb-2">Bytes ↓</th>
-            </tr>
-          </thead>
-          <tbody>
-            {flows.map((f) => (
-              <tr key={f.uid + f.seq} className="border-b border-gray-900 hover:bg-gray-900/50">
-                <td className="py-1.5 pr-4 text-gray-500">{f.seq}</td>
-                <td className="py-1.5 pr-4 font-mono text-xs">
-                  {new Date(f.ts * 1000).toISOString().slice(11, 23)}
-                </td>
-                <td className="py-1.5 pr-4 font-mono">{f.src_ip}:{f.src_port}</td>
-                <td className="py-1.5 pr-4 font-mono">{f.dst_ip}:{f.dst_port}</td>
-                <td className="py-1.5 pr-4 uppercase">{f.proto}</td>
-                <td className="py-1.5 pr-4">{f.service ?? '—'}</td>
-                <td className="py-1.5 pr-4">{f.conn_state ?? '—'}</td>
-                <td className="py-1.5 pr-4 text-right">{f.orig_bytes ?? '—'}</td>
-                <td className="py-1.5 text-right">{f.resp_bytes ?? '—'}</td>
-              </tr>
-            ))}
-            {flows.length === 0 && (
-              <tr>
-                <td colSpan={9} className="py-8 text-center text-gray-600">
-                  No flows yet — replay traffic to see data
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
-    </div>
+        <div className="panel"><div className="panel-title"><h2>Detections</h2><div className="panel-actions"><span>{alerts.length} TOTAL</span><button className="verify" onClick={verifyChain}>VERIFY CHAIN</button></div></div>
+          {alerts.map((alert) => <button className={`alert ${alert.severity.toLowerCase()}`} key={alert.alert_id} onClick={() => setSelected(alert)}><div><b>{alert.threat_class.replace('_', ' ')}</b><small>{alert.source_ip} · {new Date(alert.timestamp).toLocaleTimeString()}</small></div><strong>{Math.round(alert.confidence * 100)}%</strong></button>)}
+          {!alerts.length && <p className="empty">No alerts. Benign traffic should remain quiet.</p>}
+        </div>
+      </section>
+      {chainStatus && <div className={`chain-result ${chainStatus.valid ? 'valid' : 'invalid'}`}>{chainStatus.valid ? '✓ EVIDENCE CHAIN VALID' : '✕ EVIDENCE CHAIN FAILED'} · {chainStatus.checked} alert(s) checked</div>}
+      {selected && <section className="panel detail"><div className="panel-title"><h2>{selected.threat_class.replace('_', ' ')} evidence</h2><button onClick={() => setSelected(null)}>CLOSE</button></div><p><b>Source:</b> {selected.source_ip} · <b>Confidence:</b> {Math.round(selected.confidence * 100)}% · <b>ATT&CK:</b> {selected.attack_technique} · <b>Detector:</b> {selected.detector_version}</p><pre>{JSON.stringify({ evidence: selected.evidence, explanation: selected.explanation, evidence_hash: selected.evidence_hash, prev_hash: selected.prev_hash }, null, 2)}</pre></section>}
+      <footer className="footer">SENTINEL-X · receive-only by design · payloads are never inspected or decrypted · demo state is in memory</footer>
+    </main>
   )
 }
-
+function Metric({ label, value, accent = false }: { label: string; value: string | number; accent?: boolean }) {
+  return <div className={`metric ${accent ? 'accent' : ''}`}><small>{label}</small><b>{value}</b></div>
+}
 export default App

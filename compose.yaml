@@ -138,8 +138,8 @@ services:
 
   api:
     build:
-      context: ./api
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: api/Dockerfile
     profiles: [core, demo]
     networks: [enclave_net]
     ports:

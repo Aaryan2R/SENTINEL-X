@@ -17,7 +17,7 @@
 
 ## 2. Current status
 
-- Phase: **0 complete**. All 9 tasks done (T-001–T-009). Ready for Phase 1.
+- Phase: **Phase 1 demo slice complete**. The local replay path now covers bounded scan, SYN flood, volumetric, and DGA rules, correlation, API, and dashboard. Redis/PostgreSQL production adapters and Linux passivity counters remain follow-up work.
 - Documents drafted (v1.0, for team review): PRD, Software Architecture and Design Document (arc42 format), Technology Stack Document.
 - Context files created: `architecture.md`, `rules.md`, `task.md`, `memory.md`.
 - Next: Phase 1 — core pipeline (T-010 schemas, T-011 normaliser, T-012 streams).
@@ -42,6 +42,7 @@
 | 2026-10-05 | T-011 done: Full normaliser (conn/dns/ssl), RedisStreamPublisher (async dual-shard), StreamPublisher Protocol. 18 tests. CI format fix. |
 | 2026-10-05 | T-012 done: StreamManager (consumer groups, XREADGROUP, ack, dead-letter, lag, trim, shard assignment). 27 tests. |
 | 2026-10-05 | T-013 done: Bus abstraction — BusPublisher/Consumer/Admin Protocols (runtime_checkable). 30 tests. |
+| 2026-10-05 | Phase 1 demo slice done: bounded metadata-only detectors, deduplicating evidence-hash correlator, alert/stats/WebSocket API, seeded replay, dashboard, and runnable container files. |
 
 ## 4. Locked decisions (summary)
 
