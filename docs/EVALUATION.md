@@ -32,3 +32,9 @@ python scripts/assert_tx_zero.py --interface <capture-interface> \
 The script fails if the selected interface TX counter changes. On Windows,
 the dashboard deliberately labels passivity as `software-emulation`; it does
 not claim a kernel counter or hardware data-diode guarantee.
+
+Loss injection is available for visibility demonstrations:
+
+```powershell
+.\scripts\demo.ps1 -Scenario port_scan -LossRate 0.05
+```

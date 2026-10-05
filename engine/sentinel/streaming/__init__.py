@@ -162,7 +162,10 @@ class StreamManager:
 
 
 def shard_keys_for_worker(
-    total_shards: int, worker_id: int, stream_prefix: str = "flows:src"
+    total_shards: int,
+    worker_id: int,
+    stream_prefix: str = "flows:src",
+    total_workers: int | None = None,
 ) -> list[str]:
     """Compute which shard keys a worker owns.
 
@@ -173,4 +176,7 @@ def shard_keys_for_worker(
     # Shard keys are hex prefixes of the MD5 hash
     # With 256 possible first-byte values, we use the first hex char (16 shards)
     all_shards = [f"{stream_prefix}:{i:01x}" for i in range(total_shards)]
-    return [s for i, s in enumerate(all_shards) if i % max(1, total_shards) == worker_id]
+    workers = total_workers if total_workers is not None else total_shards
+    if workers < 1 or worker_id < 0 or worker_id >= workers:
+        raise ValueError("worker_id must be in [0, total_workers)")
+    return [s for i, s in enumerate(all_shards) if i % workers == worker_id]

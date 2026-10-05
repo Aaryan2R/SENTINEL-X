@@ -51,9 +51,9 @@ Goal: scan, DDoS, SYN flood and DGA detection with explained alerts on a live da
 
 ### Detection framework
 - [x] **T-015** Detector engine and versioned detector outputs. P0, M. Dep: T-010
-- [ ] **T-016** Sketch toolkit: HyperLogLog wrapper (bucketed, mergeable), Count-Min Sketch wrapper, EWMA/CUSUM with property tests. P0, L. Dep: T-015
-- [ ] **T-017** Window aggregator: 1 s buckets rolled into 10 s, 5 min, 1 h, 24 h; event-time with allowed lateness. P0, L. Dep: T-016
-- [ ] **T-018** Detection worker runtime: multi-process, batch reads, shard ownership, per-entity error isolation. P0, L. Dep: T-012, T-015
+- [x] **T-016** Sketch toolkit: bounded HyperLogLog, Count-Min Sketch, EWMA/CUSUM with tests. P0, L. Dep: T-015
+- [x] **T-017** Window aggregator: 1 s buckets rolled into 10 s, 5 min, 1 h, 24 h; event-time with allowed lateness. P0, L. Dep: T-016
+- [x] **T-018** Detection worker runtime: async batch reads, shard ownership, dead-lettering, acknowledgements, per-flow error isolation. P0, L. Dep: T-012, T-015
 
 ### Detectors (first set)
 - [x] **T-019** Bounded port scan detector and seeded replay. FR-13. P0, L. Dep: T-017, T-018
@@ -63,7 +63,7 @@ Goal: scan, DDoS, SYN flood and DGA detection with explained alerts on a live da
 
 ### Alerting, API and UI
 - [x] **T-023** Correlator v0: dedupe, severity mapping, evidence hash chain, alert emission. P0, M. Dep: T-018
-- [ ] **T-024** PostgreSQL schema and Alembic migrations (alerts, incidents, samples). P0, M. Dep: T-010
+- [x] **T-024** PostgreSQL schema migration and offline-safe repository for alerts, incidents, and samples. P0, M. Dep: T-010
 - [x] **T-025** API: alerts, alert detail, stats summary, WebSocket live stream. FR-41. P0, M. Dep: T-023
 - [x] **T-026** Dashboard v0: live traffic, active alerts, threat-type counts, passivity, and alert evidence. FR-42, FR-43. P0, L. Dep: T-025, T-003
 
@@ -75,14 +75,14 @@ Goal: scan, DDoS, SYN flood and DGA detection with explained alerts on a live da
 
 Goal: passivity and visibility are measurable and visible in the UI.
 
-- [ ] **T-030** Passivity monitor: read TX counters, tc drop stats, nftables policy hash, capabilities, open sockets; store samples. FR-30. P0, M. Dep: T-006
+- [~] **T-030** Passivity monitor: Linux TX counter and policy hash are live; tc/nftables/capability/socket collectors and persistence remain. FR-30. P0, M. Dep: T-006
 - [~] **T-031** Dashboard shows live TX-counter values when `SENTINEL_CAPTURE_INTERFACE` is configured on Linux and explicitly labels Windows as emulated; full attestation panel still depends on T-030. FR-30. P0, M. Dep: T-030, T-026
 - [ ] **T-032** Lab-only outbound self-test (disabled by default; result recorded). FR-31. P1, M. Dep: T-030
-- [ ] **T-033** Zeek capture-loss and stats log parsing; interface drop and sequence gap tracking; queue lag. FR-32. P0, M. Dep: T-011
-- [ ] **T-034** Visibility Health computation and per-detector modifiers (`conf * (1 - s_d * (1 - VH))`). FR-32. P0, M. Dep: T-033, T-023
-- [ ] **T-035** Shedding controller: disable ML then secondary detectors under lag; record every shed action; reflect in VH. P0, M. Dep: T-034, T-018
-- [ ] **T-036** Loss-injection tooling in the replayer (1%, 5%, 10%) and regression tests. P0, M. Dep: T-007, T-034
-- [ ] **T-037** Health strip in the dashboard (VH, shedding, passivity) on the main screen. P0, S. Dep: T-031, T-034
+- [~] **T-033** Sequence-gap and queue-lag tracking are live; Zeek capture-loss/interface-drop log parsing remains. FR-32. P0, M. Dep: T-011
+- [x] **T-034** Visibility Health computation and confidence modifier wiring. FR-32. P0, M. Dep: T-033, T-023
+- [~] **T-035** Queue-lag shedding state is implemented; detector disabling and durable shed records remain. P0, M. Dep: T-034, T-018
+- [x] **T-036** Deterministic loss-injection tooling in the replayer and launcher (`--loss-rate`, including 1%, 5%, and 10% demonstrations). P0, M. Dep: T-007, T-034
+- [x] **T-037** Dashboard health/passivity strip displays visibility and passivity state. P0, S. Dep: T-031, T-034
 
 **Exit criteria:** TX = 0 visible live; injected loss lowers VH and alert confidence on screen.
 

@@ -27,6 +27,7 @@ class Correlator:
             evidence_hash = hashlib.sha256(f"{canonical}{self._previous_hash}".encode()).hexdigest()
             alert = Alert(
                 alert_id=str(uuid4()),
+                incident_id=f"incident-{signal.entity}",
                 timestamp=datetime.now(UTC),
                 source_ip=signal.entity,
                 destination_ip=str(signal.evidence.get("target", signal.entity)),

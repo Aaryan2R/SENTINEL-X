@@ -1,6 +1,8 @@
 param(
     [ValidateSet("normal", "port_scan", "syn_flood")]
     [string]$Scenario = "port_scan",
+    [ValidateRange(0, 0.9)]
+    [double]$LossRate = 0,
     [switch]$InstallFrontend
 )
 
@@ -40,7 +42,7 @@ try {
     }
 
     python (Join-Path $Root "traffic\replay\demo_replay.py") `
-        --scenario $Scenario --api "http://127.0.0.1:8000"
+        --scenario $Scenario --api "http://127.0.0.1:8000" --loss-rate $LossRate
     Write-Host "`nSENTINEL-X demo is running." -ForegroundColor Green
     Write-Host "Dashboard: http://localhost:5173"
     Write-Host "Scenario:  $Scenario"

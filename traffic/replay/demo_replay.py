@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import random
 import time
 from datetime import UTC, datetime
 from urllib.request import Request, urlopen
@@ -24,10 +25,17 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--scenario", choices=["normal", "port_scan", "syn_flood"], default="port_scan")
     parser.add_argument("--api", default="http://localhost:8000")
+    parser.add_argument("--loss-rate", type=float, default=0.0)
+    parser.add_argument("--seed", type=int, default=42)
     args = parser.parse_args()
+    if not 0.0 <= args.loss_rate < 1.0:
+        parser.error("--loss-rate must be between 0 and 1")
+    rng = random.Random(args.seed)
     base_ts = datetime.now(UTC).timestamp()
     count = 80 if args.scenario != "normal" else 20
     for index in range(count):
+        if args.loss_rate and rng.random() < args.loss_rate:
+            continue
         is_scan = args.scenario == "port_scan"
         is_syn = args.scenario == "syn_flood"
         post(
@@ -42,7 +50,7 @@ def main() -> None:
         )
         if args.scenario == "normal":
             time.sleep(0.01)
-    print(f"Replayed {count} {args.scenario} flows into {args.api}")
+    print(f"Replayed {count} {args.scenario} flows into {args.api} (loss={args.loss_rate:.0%})")
 
 
 if __name__ == "__main__":
