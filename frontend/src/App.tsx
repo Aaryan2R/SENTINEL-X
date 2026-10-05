@@ -60,6 +60,10 @@ function App() {
         <div><p className="eyebrow">PASSIVE NETWORK TELEMETRY</p><h1>SENTINEL<span>-X</span></h1><p className="muted">Phase 1 detection console · metadata only · software-emulated passive monitoring demo</p></div>
         <div className="header-actions"><div className={`attestation ${stats.passivity.status}`}><b>● {stats.passivity.status === 'verified' ? 'PASSIVITY VERIFIED' : 'PASSIVITY EMULATED'}</b><small>TX packets: {stats.passivity.tx_packets} · {stats.passivity.mode}</small></div><button className="reset" onClick={resetDemo} disabled={resetting}>{resetting ? 'RESETTING…' : 'RESET DEMO'}</button></div>
       </header>
+      <section className="mission">
+        <div><b>THE ONE-WAY NETWORK PROBLEM</b><p>Conventional IDS tools assume they can communicate back. SENTINEL-X treats the monitoring enclave as receive-only and makes its confidence explainable.</p></div>
+        <div className="pillars"><span>PASSIVITY PROOF</span><span>VISIBILITY HEALTH</span><span>HASH-CHAINED EVIDENCE</span></div>
+      </section>
       <section className="metrics">
         <Metric label="Flows observed" value={stats.flow_count} />
         <Metric label="Active alerts" value={stats.alert_count} accent />
@@ -80,6 +84,7 @@ function App() {
         </div>
       </section>
       {selected && <section className="panel detail"><div className="panel-title"><h2>{selected.threat_class.replace('_', ' ')} evidence</h2><button onClick={() => setSelected(null)}>CLOSE</button></div><p><b>Source:</b> {selected.source_ip} · <b>Confidence:</b> {Math.round(selected.confidence * 100)}% · <b>ATT&CK:</b> {selected.attack_technique} · <b>Detector:</b> {selected.detector_version}</p><pre>{JSON.stringify({ evidence: selected.evidence, explanation: selected.explanation, evidence_hash: selected.evidence_hash, prev_hash: selected.prev_hash }, null, 2)}</pre></section>}
+      <footer className="footer">SENTINEL-X · receive-only by design · payloads are never inspected or decrypted · demo state is in memory</footer>
     </main>
   )
 }
