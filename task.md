@@ -114,7 +114,7 @@ Goal: C2 detection, behavioural ML, incidents with explanations.
 Goal: tamper evidence, evasion scorecard, benchmark and a rehearsed demo.
 
 - [ ] **T-060** Evidence writer: single writer, canonical JSON, `prev_hash`, advisory lock, Merkle roots. FR-33. P1, L. Dep: T-024, T-023
-- [ ] **T-061** Verification routine and CLI/API, plus the tamper demo (edit a record, verification fails at that record). FR-33. P1, M. Dep: T-060
+- [~] **T-061** Local verification routine, API endpoint, dashboard control, and tamper-detection tests are complete; CLI, durable-record editing demo, and Merkle-root verification remain. FR-33. P1, M. Dep: T-060
 - [ ] **T-062** Replay UI: choose scenario, duration, rate; seeded and deterministic; no external network. FR-50. P0, L. Dep: T-007, T-025
 - [ ] **T-063** Traffic generator v2: every in-scope attack class, labelled; scenario library. FR-51. P0, L. Dep: T-007
 - [ ] **T-064** Red Team mode: evasive variants (jittered beacons, low-and-slow scan, wordlist DGA, slow tunnelling) and detection-rate scorecard. FR-52. P1, L. Dep: T-063, T-040, T-019, T-022, T-050
