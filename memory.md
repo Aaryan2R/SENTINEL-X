@@ -31,6 +31,7 @@
 | 2026-10-05 | Tech Stack Document v1.0 drafted with versions checked against public release pages. Design Document corrected: Redis Stack is not needed (Redis 8 has Count-Min Sketch built in). Context files (`architecture.md`, `rules.md`, `task.md`, `memory.md`) created. |
 | 2026-10-05 | T-001 done: repo layout initialised per architecture.md §14; .gitignore, .env.example, README; docs moved to docs/. |
 | 2026-10-05 | T-002 done: uv project (Python 3.14), ruff+mypy+pytest configured, lockfile committed. All checks pass. |
+| 2026-10-05 | T-003 done: React 19 + TS strict + Vite 8.3 + Tailwind 4 scaffold. Build clean. |
 
 ## 4. Locked decisions (summary)
 

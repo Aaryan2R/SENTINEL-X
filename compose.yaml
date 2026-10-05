@@ -1,0 +1,206 @@
+# SENTINEL-X Docker Compose
+# Profiles: core (infrastructure), demo (adds traffic replay)
+# Usage: docker compose --profile demo up
+
+services:
+  # ── Infrastructure ──
+
+  redis:
+    image: redis:8-alpine
+    profiles: [core, demo]
+    networks: [enclave_net]
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: >
+      redis-server
+      --appendonly yes
+      --maxmemory 512mb
+      --maxmemory-policy noeviction
+    security_opt:
+      - no-new-privileges:true
+    cap_drop: [ALL]
+    read_only: true
+    tmpfs:
+      - /tmp:size=64m
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+  postgres:
+    image: postgres:18-alpine
+    profiles: [core, demo]
+    networks: [enclave_net]
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    env_file: .env
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-sentinel}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-sentinel_dev}
+      POSTGRES_DB: ${POSTGRES_DB:-sentinel}
+    security_opt:
+      - no-new-privileges:true
+    cap_drop: [ALL]
+    # postgres needs SETUID/SETGID/FOWNER/DAC_READ_SEARCH/CHOWN for initdb
+    cap_add: [SETUID, SETGID, FOWNER, DAC_READ_SEARCH, CHOWN]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-sentinel}"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+  # ── Sensor (INV-5: no network, read-only root, minimal caps) ──
+
+  sensor:
+    build:
+      context: ./sensor
+      dockerfile: Dockerfile
+    profiles: [core, demo]
+    # INV-5: network_mode: none — setup script attaches capture iface later
+    network_mode: none
+    volumes:
+      - zeek_logs:/var/log/zeek:rw
+    security_opt:
+      - no-new-privileges:true
+    cap_drop: [ALL]
+    cap_add: [NET_RAW, NET_ADMIN]
+    read_only: true
+    tmpfs:
+      - /tmp:size=128m
+      - /var/run:size=16m
+
+  # ── Engine services ──
+
+  normaliser:
+    build:
+      context: ./engine
+      dockerfile: Dockerfile
+      target: normaliser
+    profiles: [core, demo]
+    networks: [enclave_net]
+    volumes:
+      - zeek_logs:/var/log/zeek:ro
+    env_file: .env
+    depends_on:
+      redis:
+        condition: service_healthy
+    security_opt:
+      - no-new-privileges:true
+    cap_drop: [ALL]
+    read_only: true
+    tmpfs:
+      - /tmp:size=64m
+
+  detector:
+    build:
+      context: ./engine
+      dockerfile: Dockerfile
+      target: detector
+    profiles: [core, demo]
+    networks: [enclave_net]
+    env_file: .env
+    depends_on:
+      redis:
+        condition: service_healthy
+    security_opt:
+      - no-new-privileges:true
+    cap_drop: [ALL]
+    read_only: true
+    tmpfs:
+      - /tmp:size=128m
+
+  correlator:
+    build:
+      context: ./engine
+      dockerfile: Dockerfile
+      target: correlator
+    profiles: [core, demo]
+    networks: [enclave_net]
+    env_file: .env
+    depends_on:
+      redis:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+    security_opt:
+      - no-new-privileges:true
+    cap_drop: [ALL]
+    read_only: true
+    tmpfs:
+      - /tmp:size=64m
+
+  # ── API + Dashboard ──
+
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    profiles: [core, demo]
+    networks: [enclave_net]
+    ports:
+      - "8000:8000"
+    env_file: .env
+    depends_on:
+      redis:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+    security_opt:
+      - no-new-privileges:true
+    cap_drop: [ALL]
+    read_only: true
+    tmpfs:
+      - /tmp:size=64m
+
+  dashboard:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    profiles: [core, demo]
+    networks: [enclave_net]
+    ports:
+      - "3000:80"
+    depends_on:
+      - api
+    security_opt:
+      - no-new-privileges:true
+    cap_drop: [ALL]
+    read_only: true
+    tmpfs:
+      - /tmp:size=16m
+      - /var/cache/nginx:size=32m
+      - /var/run:size=8m
+
+  # ── Demo-only services ──
+
+  traffic-replay:
+    build:
+      context: ./traffic
+      dockerfile: Dockerfile
+    profiles: [demo]
+    network_mode: host
+    volumes:
+      - ./traffic/scenarios:/scenarios:ro
+    security_opt:
+      - no-new-privileges:true
+    cap_drop: [ALL]
+    cap_add: [NET_RAW]
+
+# ── Networks ──
+
+networks:
+  enclave_net:
+    internal: true
+    driver: bridge
+
+# ── Volumes ──
+
+volumes:
+  redis_data:
+  pg_data:
+  zeek_logs:
