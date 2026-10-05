@@ -56,19 +56,32 @@ def parse_zeek_conn_line(line: str) -> FlowRecord | None:
     # Zeek conn.log required fields
     try:
         _seq_counter += 1
+        ts_val = float(raw["ts"])
+        duration_val = float(raw["duration"]) if raw.get("duration") is not None else None
         flow = FlowRecord(
             uid=str(raw.get("uid", ""))[:MAX_FIELD_LEN],
-            ts=float(raw["ts"]),
+            ts_start=ts_val,
+            ts_end=(ts_val + duration_val) if duration_val is not None else None,
             src_ip=_clip(str(raw["id.orig_h"])) or "",
             src_port=int(raw["id.orig_p"]),
             dst_ip=_clip(str(raw["id.resp_h"])) or "",
             dst_port=int(raw["id.resp_p"]),
             proto=_clip(str(raw.get("proto", "unknown"))) or "unknown",
             service=_clip(raw.get("service")),
-            duration=float(raw["duration"]) if raw.get("duration") is not None else None,
+            history=_clip(raw.get("history")),
+            duration=duration_val,
             orig_bytes=int(raw["orig_bytes"]) if raw.get("orig_bytes") is not None else None,
             resp_bytes=int(raw["resp_bytes"]) if raw.get("resp_bytes") is not None else None,
+            orig_pkts=int(raw["orig_pkts"]) if raw.get("orig_pkts") is not None else None,
+            resp_pkts=int(raw["resp_pkts"]) if raw.get("resp_pkts") is not None else None,
             conn_state=_clip(raw.get("conn_state")),
+            dns_query=_clip(raw.get("query")),
+            dns_qtype=_clip(str(raw["qtype_name"])) if raw.get("qtype_name") else None,
+            dns_rcode=int(raw["rcode"]) if raw.get("rcode") is not None else None,
+            tls_ja3=_clip(raw.get("ja3")),
+            tls_ja4=_clip(raw.get("ja4")),
+            tls_sni=_clip(raw.get("server_name")),
+            tls_version=_clip(raw.get("version")) if "version" in raw else None,
             seq=_seq_counter,
         )
     except (KeyError, ValueError, TypeError) as exc:
