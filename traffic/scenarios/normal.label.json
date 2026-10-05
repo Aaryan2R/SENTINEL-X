@@ -1,0 +1,8 @@
+{
+  "scenario": "normal",
+  "seed": 42,
+  "description": "Normal HTTP/HTTPS/DNS traffic from internal hosts",
+  "label": "benign",
+  "packet_count": 100,
+  "pcap_file": "normal.pcap"
+}

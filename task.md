@@ -24,7 +24,7 @@ Goal: the services start and one replayed flow reaches the dashboard.
 - [x] **T-003** Frontend tooling: React 19 + TypeScript + Vite 8 + Tailwind 4 skeleton, lint, `npm ci` lockfile. P0, S. Dep: T-001
 - [ ] **T-004** Sensor image: Zeek (pinned by digest; 9.0 LTS, 8.0.x fallback), install JA4 package with `zkg` at build time, JSON logs enabled. P0, M. Dep: T-001
 - [x] **T-005** Compose skeleton with profiles `core` and `demo`; `enclave_net` as `internal: true`; services as stubs. P0, M. Dep: T-001
-- [ ] **T-006** Namespace setup scripts in `infra/` (veth pair, no IP, ARP/IPv6 off, tc egress drop, nftables output drop) with teardown. P0, M. Dep: T-001
+- [x] **T-006** Namespace setup scripts in `infra/` (veth pair, no IP, ARP/IPv6 off, tc egress drop, nftables output drop) with teardown. P0, M. Dep: T-001
 - [ ] **T-007** Traffic generator v1 and seeded replay: normal traffic plus one scan scenario, labelled. P0, M. Dep: T-001
 - [ ] **T-008** Hello-flow: PCAP replay -> Zeek -> normaliser (minimal) -> Redis stream -> API -> dashboard shows one flow. P0, M. Dep: T-004, T-005, T-006, T-007
 - [ ] **T-009** CI pipeline: lint, type check, unit tests, seeded regression stub, TX = 0 assertion stub. P0, M. Dep: T-002, T-003

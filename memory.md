@@ -33,6 +33,7 @@
 | 2026-10-05 | T-002 done: uv project (Python 3.14), ruff+mypy+pytest configured, lockfile committed. All checks pass. |
 | 2026-10-05 | T-003 done: React 19 + TS strict + Vite 8.3 + Tailwind 4 scaffold. Build clean. |
 | 2026-10-05 | T-005 done: compose.yaml with core/demo profiles, enclave_net internal, all services hardened. Config validates. |
+| 2026-10-05 | T-006 done: netns/tc/nftables scripts + orchestrators. Bash syntax valid. Needs Linux to run. |
 
 ## 4. Locked decisions (summary)
 
