@@ -8,6 +8,7 @@ license = "LicenseRef-Proprietary"
 dependencies = [
     "fastapi>=0.142.2",
     "pydantic>=2.13.5",
+    "redis>=8.1.0",
     "uvicorn>=0.54.0",
 ]
 
@@ -69,3 +70,9 @@ disallow_untyped_defs = false
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-v --tb=short"
+
+[dependency-groups]
+dev = [
+    "anyio>=4.15.1",
+    "pytest-anyio>=0.0.0",
+]

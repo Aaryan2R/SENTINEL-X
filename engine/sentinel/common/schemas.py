@@ -171,9 +171,7 @@ class Alert(BaseModel):
     # Scoring
     severity: Severity = Field(description="Alert severity")
     confidence: float = Field(ge=0.0, le=1.0, description="Confidence score [0, 1]")
-    visibility_health: float = Field(
-        ge=0.0, le=1.0, description="Visibility Health at alert time"
-    )
+    visibility_health: float = Field(ge=0.0, le=1.0, description="Visibility Health at alert time")
 
     # Evidence and explanation
     evidence: dict[str, Any] = Field(description="Supporting evidence")
