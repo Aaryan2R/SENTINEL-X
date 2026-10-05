@@ -39,6 +39,7 @@
 | 2026-10-05 | T-008 done: hello-flow pipeline — normaliser, FastAPI, dashboard flow table. 6 tests pass, lint/mypy clean. Full stack needs Linux. |
 | 2026-10-05 | T-009 done: GitHub Actions CI — engine (ruff/mypy/pytest) + frontend (tsc+build). Regression and TX=0 stubs. |
 | 2026-10-05 | T-010 done: Pydantic schemas v1.0 — FlowRecord (DNS/TLS), Signal (score bounds, mandatory evidence), Alert (hash chain). 12 tests. |
+| 2026-10-05 | T-011 done: Full normaliser (conn/dns/ssl), RedisStreamPublisher (async dual-shard), StreamPublisher Protocol. 18 tests. CI format fix. |
 
 ## 4. Locked decisions (summary)
 
